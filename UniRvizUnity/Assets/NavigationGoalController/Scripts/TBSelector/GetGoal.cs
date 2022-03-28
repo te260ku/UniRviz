@@ -10,26 +10,20 @@ public class GetGoal : MonoBehaviour
     Vector3 _cursorPosition;
     Vector3 _cursorPosition3d;
     RaycastHit hit;
-
-    public Vector3 non_clickPosition;
     public Vector3 _goalPosition;
     public Vector3 _goalRotation; 
     Quaternion lookRotation;
-    Vector3 eulerRotation;
-    public GameObject goal;
+    public GameObject _goalPrefab;
     public bool goal_status = false;
     bool _isMouseButtonDown;
     [SerializeField] GameObject _arrowObj;
+    [SerializeField] Text _cursorPositionText;
     MeshRenderer _meshRenderer;
     
     void Start()
     {
-        non_clickPosition.x = 0;
-        non_clickPosition.y = -2;
-        non_clickPosition.z = 0;
         _goalPosRotText.text = "";
-
-        _meshRenderer = _arrowObj.GetComponent<MeshRenderer>();
+        _arrowObj.SetActive(false);
     }
 
 
@@ -40,8 +34,6 @@ public class GetGoal : MonoBehaviour
         bool isValidPosition = 0 < hit.point.x && hit.point.x < 10 && 0 < hit.point.z && hit.point.z < 10;
         if (isValidPosition) {
             GetGoalPosDir();
-            Decide_goalPosition();
-            
         }
     }
 
@@ -52,6 +44,7 @@ public class GetGoal : MonoBehaviour
         if (Physics.Raycast(Camera.main.transform.position, (_cursorPosition3d - Camera.main.transform.position), out hit, Mathf.Infinity))
         {
             Debug.DrawRay(Camera.main.transform.position, (_cursorPosition3d - Camera.main.transform.position) * hit.distance, Color.red);
+            _cursorPositionText.text = "Mouse"+"\n" + hit.point.ToString();
         }
 
     }
@@ -61,8 +54,6 @@ public class GetGoal : MonoBehaviour
         {
             _goalPosition = new Vector3(hit.point.x, 0.2f, hit.point.z);
 
-            // transform.position = _goalPosition;
-
             _arrowObj.transform.position = _goalPosition; 
 
             _isMouseButtonDown = true;
@@ -71,30 +62,27 @@ public class GetGoal : MonoBehaviour
         //Goal Direction
         if (_isMouseButtonDown)
         {
-            _meshRenderer.enabled = true;
+            _arrowObj.SetActive(true);
 
-            var direction = hit.point - transform.position;
+            var direction = hit.point - _arrowObj.transform.position;
             direction.y = 0;
             lookRotation = Quaternion.LookRotation(direction, Vector3.up);
-            // transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, 0.1f);
+            
 
             _arrowObj.transform.rotation = Quaternion.Lerp(_arrowObj.transform.rotation, lookRotation, 0.1f);
 
-            _goalRotation = Quaternion.Lerp(transform.rotation, lookRotation, 0.1f).eulerAngles;
+            _goalRotation = Quaternion.Lerp(_arrowObj.transform.rotation, lookRotation, 0.1f).eulerAngles;
         }
         else
         {
-            // transform.position = non_clickPosition;
-            _meshRenderer.enabled = false;
+            _arrowObj.SetActive(false);
         }
-    }
 
-    
-    void Decide_goalPosition(){
+
         if (Input.GetMouseButtonUp(0))
         {
-            GameObject obj = Instantiate(goal, _goalPosition, Quaternion.Lerp(transform.rotation, lookRotation, 0.1f));
-            obj.GetComponent<Renderer> ().material.color = goal.GetComponent<Renderer> ().material.color;
+            GameObject obj = Instantiate(_goalPrefab, _goalPosition, Quaternion.Euler(_goalRotation));
+            // obj.GetComponent<Renderer> ().material.color = goal.GetComponent<Renderer>().material.color;
             goal_status = true;
 
             _isMouseButtonDown = false;
