@@ -1813,7 +1813,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &817822449
 Transform:
   m_ObjectHideFlags: 0
@@ -1841,7 +1841,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cursorPositionText: {fileID: 246416727}
-  _clickPosition: {x: 0, y: 0, z: 0}
 --- !u!135 &817822451
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2481,7 +2480,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 15db3c2533f403243ae9293164a2ca67, type: 2}
+  - {fileID: 2100000, guid: 2c8a260c463bae1e0a9df9edddad7204, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2537,12 +2536,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0133778fd47d3a84791d5980bbc0bc25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text2: {fileID: 1728352895}
+  _goalPosRotText: {fileID: 1728352895}
   non_clickPosition: {x: 0, y: 0, z: 0}
   goalPosition: {x: 0, y: 0, z: 0}
   goalRotation: {x: 0, y: 0, z: 0}
   goal: {fileID: 1318047422}
   goal_status: 0
+  _rotationSelectObj: {fileID: 0}
 --- !u!1 &1472609114
 GameObject:
   m_ObjectHideFlags: 0

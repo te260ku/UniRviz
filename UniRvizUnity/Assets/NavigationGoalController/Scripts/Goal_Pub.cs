@@ -20,8 +20,8 @@ public class Goal_Pub : MonoBehaviour
     //TB Selector
     [SerializeField] private Dropdown TBSelector;
     public GetGoal getGoal;
-    Vector3 goalPosition;
-    Vector3 goalRotation;
+    Vector3 _goalPosition;
+    Vector3 _goalRotation;
     public GetGoal getgoal;
 
     
@@ -44,8 +44,8 @@ public class Goal_Pub : MonoBehaviour
 
     void Move_a_TB(){
         //receive Goal Position
-        goalPosition = getGoal.goalPosition;
-        goalRotation = getGoal.goalRotation;
+        _goalPosition = getGoal._goalPosition;
+        _goalRotation = getGoal._goalRotation;
 
         //header
         header.stamp.sec = 0;
@@ -53,12 +53,12 @@ public class Goal_Pub : MonoBehaviour
         header.frame_id = "map";
 
         //pose
-        pose.position.x = goalPosition.z;
-        pose.position.y = goalPosition.x;
+        pose.position.x = _goalPosition.z;
+        pose.position.y = _goalPosition.x;
         pose.position.z = 0;
         pose.orientation.x = 0;
         pose.orientation.y = 0;
-        pose.orientation.z = goalRotation.y;
+        pose.orientation.z = _goalRotation.y;
         pose.orientation.w = 0;
 
         //選択するTBによってtopic名を変更する

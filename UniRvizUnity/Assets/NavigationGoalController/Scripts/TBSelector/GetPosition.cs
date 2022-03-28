@@ -12,7 +12,7 @@ public class GetPosition : MonoBehaviour
     Vector3 _cursorPosition;
     Vector3 _cursorPosition3d;
     RaycastHit hit;
-    public Vector3 _clickPosition;
+    Vector3 _clickPosition;
     
     
     void Start()
@@ -40,11 +40,6 @@ public class GetPosition : MonoBehaviour
                 transform.position = hit.point;
             }
         }
-        
-        
-        
-       
-    }
-
-    
+    }  
+      
 }
