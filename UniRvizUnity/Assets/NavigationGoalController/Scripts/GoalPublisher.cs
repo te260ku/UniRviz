@@ -7,9 +7,12 @@ using RosMessageTypes.Geometry;
 using RosMessageTypes.Std;
 using RosMessageTypes.BuiltinInterfaces;
 
+/// <summary>
+/// ゴールをパブリッシュするスクリプト
+/// </summary>
 public class GoalPublisher : MonoBehaviour
 {
-    [SerializeField] private Dropdown TBSelector;
+    [SerializeField] Dropdown _TBSelector;
     [SerializeField] string[] _topicNames;
     ROSConnection _ros;
 
@@ -20,9 +23,8 @@ public class GoalPublisher : MonoBehaviour
         {
             _ros.RegisterPublisher<PoseStampedMsg>(topicName);
         }
-        _ros.RegisterPublisher<PoseWithCovarianceStampedMsg>("/initialpose");
 
-        
+        _ros.RegisterPublisher<PoseWithCovarianceStampedMsg>("/initialpose");
     }
 
     public void SendInitialPose() {
@@ -44,7 +46,7 @@ public class GoalPublisher : MonoBehaviour
         PoseWithCovarianceStampedMsg poseStampedMsg = new PoseWithCovarianceStampedMsg(header, pose); 
         _ros.Publish("/initialpose", poseStampedMsg);
 
-        Debug.Log("Send Initial Pose");
+        Debug.Log(pose.pose);
     }
 
     public void SendGoal(Vector3 pos, Vector3 rot) {
@@ -69,7 +71,7 @@ public class GoalPublisher : MonoBehaviour
         pose.orientation.w = 0;
 
         PoseStampedMsg poseStampedMsg = new PoseStampedMsg(header, pose); 
-        var topicName = _topicNames[TBSelector.value];
+        var topicName = _topicNames[_TBSelector.value];
         _ros.Publish(topicName, poseStampedMsg);
 
         Debug.Log(poseStampedMsg.pose);

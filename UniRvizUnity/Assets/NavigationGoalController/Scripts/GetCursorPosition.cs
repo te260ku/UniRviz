@@ -8,10 +8,6 @@ public class GetCursorPosition : MonoBehaviour
     RaycastHit hit;
 
     public Vector3 GetMousePosition() {
-        var _cursorPosition = Input.mousePosition;
-        _cursorPosition.z = 10f;
-        var _cursorPosition3d = Camera.main.ScreenToWorldPoint(_cursorPosition);
-
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out hit))

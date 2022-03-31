@@ -16,15 +16,11 @@ public class MapReader : MonoBehaviour
     [SerializeField] GameObject _tb3Obj;
     [NonSerialized] public Vector3 _originPos;
 
-    private void Start() {
-        // ImportMap(_imagePath);
+    public void ImportMap() {
+        ReadMap(_imagePath);
     }
 
-    public void ImportMapPath() {
-        ImportMap(_imagePath);
-    }
-
-    public void ImportMap(string path) {
+    public void ReadMap(string path) {
         var texture = TextureReader.GetTextureFromPngFile(path);
         meshRenderer.material.mainTexture = texture;
         
@@ -38,12 +34,8 @@ public class MapReader : MonoBehaviour
         _plane.transform.rotation = Quaternion.Euler(new Vector3(0f, 90f, 0f));
         _plane.transform.position = new Vector3(0f, 0f, 0f);
         
-
         _mapOriginObj.transform.position = new Vector3(-texture.height/2f*0.05f, 0f, -texture.width/2f*0.05f);
         
-
-        
-
         _tb3Obj.transform.position = new Vector3(
             ((-texture.height/2f*0.05f)+(yaml.origin[1]*-1f))*-1f, 
             0f, 
@@ -55,8 +47,6 @@ public class MapReader : MonoBehaviour
             0f, 
             (-texture.width/2f*0.05f)+(yaml.origin[0]*-1f)
         );
-
-        Debug.Log(_originPos);
     }
 
 }
