@@ -28,25 +28,18 @@ public class MapReader : MonoBehaviour
         var scaleX = yaml.resolution * texture.width * 0.1f;
         var scaleZ = yaml.resolution * texture.height * 0.1f;
         _plane.transform.localScale = new Vector3(scaleX, 1f, scaleZ);
-        var posX = yaml.resolution * texture.width * 0.1f * yaml.origin[0];
-        var posZ = yaml.resolution * (texture.width/2 - texture.height/2) * -1f;
         
         _plane.transform.rotation = Quaternion.Euler(new Vector3(0f, 90f, 0f));
-        _plane.transform.position = new Vector3(0f, 0f, 0f);
         
         _mapOriginObj.transform.position = new Vector3(-texture.height/2f*0.05f, 0f, -texture.width/2f*0.05f);
         
-        _tb3Obj.transform.position = new Vector3(
-            ((-texture.height/2f*0.05f)+(yaml.origin[1]*-1f))*-1f, 
-            0f, 
-            (-texture.width/2f*0.05f)+(yaml.origin[0]*-1f)
-        );
-
         _originPos = new Vector3(
-            ((-texture.height/2f*0.05f)+(yaml.origin[1]*-1f))*-1f, 
+            ((-texture.height/2f*yaml.resolution)+(yaml.origin[1]*-1f))*-1f, 
             0f, 
-            (-texture.width/2f*0.05f)+(yaml.origin[0]*-1f)
+            (-texture.width/2f*yaml.resolution)+(yaml.origin[0]*-1f)
         );
+        
+        _tb3Obj.transform.position = _originPos;
     }
 
 }
