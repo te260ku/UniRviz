@@ -17,10 +17,14 @@ public class MapReader : MonoBehaviour
     [NonSerialized] public Vector3 _originPos;
 
     private void Start() {
+        // ImportMap(_imagePath);
+    }
+
+    public void ImportMapPath() {
         ImportMap(_imagePath);
     }
 
-    void ImportMap(string path) {
+    public void ImportMap(string path) {
         var texture = TextureReader.GetTextureFromPngFile(path);
         meshRenderer.material.mainTexture = texture;
         
