@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using TMPro;
+using UnityEngine.EventSystems;
 
 public class GetGoal : MonoBehaviour
 {
     [SerializeField] GameObject _arrowObj;
     [SerializeField] GameObject _goalPrefab;
     [SerializeField] GoalPublisher _goalPublisher;
-    [SerializeField] Text _cursorPositionText;
-    [SerializeField] Text _goalPosRotText;
+    [SerializeField] TextMeshProUGUI _cursorPositionText;
+    [SerializeField] TextMeshProUGUI _goalPosRotText;
+    [SerializeField] GetCursorPosition _getCursorPosition;
+    [SerializeField] GameObject _tb3;
     Vector3 _cursorPosition;
     Vector3 _cursorPosition3d;
     RaycastHit hit;
@@ -19,10 +23,15 @@ public class GetGoal : MonoBehaviour
     [NonSerialized] public bool goal_status = false;
     Quaternion _lookRotation;
     bool _isMouseButtonDown;
+    Vector3 _hitPos;
+    [SerializeField] MapReader _mapReader;
     
     void Start()
     {
         _arrowObj.SetActive(false);
+
+        _cursorPositionText.text = "Cursor: ";
+        _goalPosRotText.text = "Goal: ";
     }
 
 
@@ -31,32 +40,58 @@ public class GetGoal : MonoBehaviour
         GetMousePosition();
         
         bool isValidPosition = 0 < hit.point.x && hit.point.x < 10 && 0 < hit.point.z && hit.point.z < 10;
+        isValidPosition = true;
         if (isValidPosition) {
             GetGoalPosDir();
-            _goalPosRotText.text = "Goal" + 
-                                    "\n" + "Pos=" + _goalPosition.ToString() + 
-                                    "\n" + "Rot=" + _goalRotation.ToString();
+            _goalPosRotText.text = "Goal: {" + 
+                                    "Pos: " + _goalPosition.ToString() + 
+                                    ", " + "Rot: " + _goalRotation.ToString() + "}";
+        }
+
+        if (Input.GetKeyDown(KeyCode.I)) {
+            _goalPublisher.SendInitialPose(_tb3.transform.position, _tb3.transform.rotation.eulerAngles);
         }
     }
+
+    
 
     void GetMousePosition() {
         _cursorPosition = Input.mousePosition;
         _cursorPosition.z = 10.0f;
         _cursorPosition3d = Camera.main.ScreenToWorldPoint(_cursorPosition);
+
+        
+
         if (Physics.Raycast(Camera.main.transform.position, (_cursorPosition3d - Camera.main.transform.position), out hit, Mathf.Infinity))
         {
             Debug.DrawRay(Camera.main.transform.position, (_cursorPosition3d - Camera.main.transform.position) * hit.distance, Color.red);
-            _cursorPositionText.text = "Mouse" + "\n" + hit.point.ToString();
+            
+
+            _hitPos = hit.point;
+            
+            _hitPos.x -= _mapReader._originPos.x;
+            _hitPos.y -= _mapReader._originPos.y;
+            _hitPos.z -= _mapReader._originPos.z;
+            _hitPos.x *= -1f;
+
+            // _cursorPositionText.text = "Cursor" + "\n" + hit.point.ToString();
+            _cursorPositionText.text = "Cursor: " + _hitPos.ToString();
         }
+
+        
+        
 
     }
 
     void GetGoalPosDir() {
         if (Input.GetMouseButtonDown(0))
         {
-            _goalPosition = new Vector3(hit.point.x, 0.2f, hit.point.z);
+            if (EventSystem.current.IsPointerOverGameObject()) return;
+            if (_isMouseButtonDown) return;
 
-            _arrowObj.transform.position = _goalPosition; 
+            _goalPosition = new Vector3(_hitPos.x, 0.2f, _hitPos.z);
+
+            _arrowObj.transform.position = hit.point; 
 
             _isMouseButtonDown = true;
         }
@@ -83,9 +118,10 @@ public class GetGoal : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            if (!_isMouseButtonDown) return;
             _goalPublisher.SendGoal(_goalPosition, _goalRotation);
 
-            GameObject obj = Instantiate(_goalPrefab, _goalPosition, Quaternion.Euler(_goalRotation));
+            GameObject obj = Instantiate(_goalPrefab, hit.point, Quaternion.Euler(_goalRotation));
             // obj.GetComponent<Renderer>().material.color = goal.GetComponent<Renderer>().material.color;
             goal_status = true;
             _isMouseButtonDown = false;

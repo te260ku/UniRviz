@@ -1901,7 +1901,7 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 1845519063}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &801745474
 GameObject:
@@ -2943,6 +2943,7 @@ MonoBehaviour:
   _goalPublisher: {fileID: 1483034270}
   _cursorPositionText: {fileID: 246416727}
   _goalPosRotText: {fileID: 1728352895}
+  _getCursorPosition: {fileID: 0}
 --- !u!1 &1472609114
 GameObject:
   m_ObjectHideFlags: 0
@@ -3627,8 +3628,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 801100643}
   - {fileID: 2135273024}
+  - {fileID: 801100643}
   - {fileID: 1052418139}
   - {fileID: 2135138372}
   - {fileID: 2061516170}
@@ -4414,7 +4415,7 @@ Transform:
   m_LocalScale: {x: 2, y: 0.01, z: 2}
   m_Children: []
   m_Father: {fileID: 1845519063}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2135273025
 MonoBehaviour:

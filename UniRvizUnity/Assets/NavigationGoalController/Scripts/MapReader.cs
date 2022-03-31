@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 /// <summary>
 /// マップをインポートするスクリプト
@@ -13,6 +14,7 @@ public class MapReader : MonoBehaviour
     [SerializeField] GameObject _plane;
     [SerializeField] GameObject _mapOriginObj;
     [SerializeField] GameObject _tb3Obj;
+    [NonSerialized] public Vector3 _originPos;
 
     private void Start() {
         ImportMap(_imagePath);
@@ -34,12 +36,23 @@ public class MapReader : MonoBehaviour
         
 
         _mapOriginObj.transform.position = new Vector3(-texture.height/2f*0.05f, 0f, -texture.width/2f*0.05f);
+        
+
+        
 
         _tb3Obj.transform.position = new Vector3(
             ((-texture.height/2f*0.05f)+(yaml.origin[1]*-1f))*-1f, 
             0f, 
             (-texture.width/2f*0.05f)+(yaml.origin[0]*-1f)
         );
+
+        _originPos = new Vector3(
+            ((-texture.height/2f*0.05f)+(yaml.origin[1]*-1f))*-1f, 
+            0f, 
+            (-texture.width/2f*0.05f)+(yaml.origin[0]*-1f)
+        );
+
+        Debug.Log(_originPos);
     }
 
 }

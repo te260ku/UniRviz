@@ -20,6 +20,39 @@ public class GoalPublisher : MonoBehaviour
         {
             _ros.RegisterPublisher<PoseStampedMsg>(topicName);
         }
+        _ros.RegisterPublisher<PoseWithCovarianceStampedMsg>("/initialpose");
+
+        
+    }
+
+    public void SendInitialPose(Vector3 pos, Vector3 rot) {
+        PoseWithCovarianceMsg pose = new PoseWithCovarianceMsg();
+        HeaderMsg header = new HeaderMsg();
+
+        header.stamp.sec = 0;
+        header.stamp.nanosec = 0;
+        header.frame_id = "map";
+
+        // pose.pose.position.x = pos.z;
+        // pose.pose.position.y = pos.x;
+        // pose.pose.position.z = 0;
+        // pose.pose.orientation.x = 0;
+        // pose.pose.orientation.y = 0;
+        // pose.pose.orientation.z = rot.y;
+        // pose.pose.orientation.w = 0;
+
+        pose.pose.position.x = 0.0;
+        pose.pose.position.y = 0.0;
+        pose.pose.position.z = 0.0;
+        pose.pose.orientation.x = 0.0;
+        pose.pose.orientation.y = 0.0;
+        pose.pose.orientation.z = 0.0;
+        pose.pose.orientation.w = 0.1;
+
+        PoseWithCovarianceStampedMsg poseStampedMsg = new PoseWithCovarianceStampedMsg(header, pose); 
+        _ros.Publish("/initialpose", poseStampedMsg);
+
+        Debug.Log("initial pose");
     }
 
     public void SendGoal(Vector3 pos, Vector3 rot) {
