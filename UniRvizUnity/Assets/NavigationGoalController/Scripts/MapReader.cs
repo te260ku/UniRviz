@@ -34,9 +34,9 @@ public class MapReader : MonoBehaviour
         _mapOriginObj.transform.position = new Vector3(-texture.height/2f*0.05f, 0f, -texture.width/2f*0.05f);
         
         _originPos = new Vector3(
-            ((-texture.height/2f*yaml.resolution)+(yaml.origin[1]*-1f))*-1f, 
+            (texture.height/2f*yaml.resolution)+(yaml.origin[1]), 
             0f, 
-            (-texture.width/2f*yaml.resolution)+(yaml.origin[0]*-1f)
+            ((texture.width/2f*yaml.resolution)+(yaml.origin[0]))*-1f
         );
         
         _tb3Obj.transform.position = _originPos;
