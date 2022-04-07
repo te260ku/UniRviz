@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(cpp_pubsub)
+project(nav2_goal_controller)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -17,23 +17,33 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
-
-add_executable(listener src/subscriber_member_function.cpp)
-ament_target_dependencies(listener rclcpp geometry_msgs)
-
-add_executable(publisher src/publisher_member_function.cpp)
-ament_target_dependencies(publisher rclcpp std_msgs)
-
-install(TARGETS
-  listener
-  publisher
-  DESTINATION lib/${PROJECT_NAME})
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+find_package(nav2_goal_controller_interfaces REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
+find_package(rclcpp_components REQUIRED)
+find_package(nav2_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+
+set(dependencies
+   rclcpp
+   rclcpp_action
+   nav2_msgs
+   geometry_msgs
+)
+
+add_executable(nav2_send_goal src/nav2_action_client.cpp)
+add_executable(nav2_send_waypoint src/nav2_action_client_waypoint.cpp)
+
+ament_target_dependencies(nav2_send_goal
+  ${dependencies}
+)
+
+ament_target_dependencies(nav2_send_waypoint
+  ${dependencies}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -45,5 +55,13 @@ if(BUILD_TESTING)
   #set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+install(TARGETS
+  nav2_send_goal
+  nav2_send_waypoint
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+  DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

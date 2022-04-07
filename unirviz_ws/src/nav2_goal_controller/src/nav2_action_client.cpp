@@ -35,9 +35,25 @@ public:
     mPoseSub = create_subscription<geometry_msgs::msg::PoseStamped>(
                 "TB1/pose", qos,
                 std::bind(&Nav2Client::poseCallback, this, _1) );
+
+    // サブスクライバーを作成
+    mCancelSub = create_subscription<geometry_msgs::msg::PoseStamped>(
+                "TB1/cancel", qos,
+                std::bind(&Nav2Client::cancelCallback, this, _1) );
   
     // アクションクライアントを作成
     this->client_ptr_  = rclcpp_action::create_client<NavigateToPose>(this, "navigate_to_pose");
+  }
+
+  void cancelCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg) {
+    while (!this->client_ptr_->wait_for_action_server()) {
+      RCLCPP_INFO(get_logger(), "Waiting for action server...");
+    }
+
+    RCLCPP_INFO(get_logger(), "Received frame : X: %.2f Y: %.2f Z: %.2f",
+             msg->pose.position.x, msg->pose.position.y, msg->pose.position.z);
+
+    client_ptr_->async_cancel_all_goals();
   }
   
   void poseCallback(const geometry_msgs::msg::PoseStamped::SharedPtr msg) {
@@ -69,6 +85,7 @@ public:
     }
 }
   rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr mPoseSub;
+  rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr mCancelSub;
   
   void sendGoal(void) {
     // アクションが提供されているまでに待つ
