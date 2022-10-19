@@ -20,6 +20,7 @@ public class GetGoal : MonoBehaviour
     [SerializeField] GetCursorPosition _getCursorPosition;
     [SerializeField] GameObject _tb3;
     Vector3 _raycastHitPoint;
+    Vector3 _raycastHitPointOnButtonDown;
     [NonSerialized] public Vector3 _goalPosition;
     [NonSerialized] public Vector3 _goalRotation; 
     Quaternion _lookRotation;
@@ -59,6 +60,8 @@ public class GetGoal : MonoBehaviour
             if (EventSystem.current.IsPointerOverGameObject()) return;
             if (_isMouseButtonDown) return;
 
+            _raycastHitPointOnButtonDown = _raycastHitPoint;
+
             // 向きを決めるための矢印オブジェクトを表示する
             _arrowObj.SetActive(true);
             _arrowObj.transform.position = _raycastHitPoint;
@@ -82,11 +85,11 @@ public class GetGoal : MonoBehaviour
 
             _arrowObj.SetActive(false);
 
-            _goalPosition = new Vector3(_hitPos.x, 0.2f, _hitPos.z);
+            _goalPosition = new Vector3(_hitPos.x, 0, _hitPos.z);
             _goalRotation = Quaternion.Lerp(_arrowObj.transform.rotation, _lookRotation, 0.1f).eulerAngles;
 
             // ゴールを示すマーカーを作成
-            GameObject obj = Instantiate(_goalPrefab, _raycastHitPoint, Quaternion.Euler(_goalRotation));
+            GameObject obj = Instantiate(_goalPrefab, _raycastHitPointOnButtonDown, Quaternion.Euler(_goalRotation));
 
             // ゴールを送信
             _goalPublisher.SendGoal(_goalPosition, _goalRotation);
