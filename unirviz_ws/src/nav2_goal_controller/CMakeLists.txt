@@ -20,11 +20,12 @@ find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
-find_package(nav2_goal_controller_interfaces REQUIRED)
+find_package(nav2_unity_interfaces REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_action REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(nav2_msgs REQUIRED)
+find_package(tf2 REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
 set(dependencies
@@ -32,6 +33,8 @@ set(dependencies
    rclcpp_action
    nav2_msgs
    geometry_msgs
+   nav2_unity_interfaces
+   tf2
 )
 
 add_executable(nav2_send_goal src/nav2_action_client.cpp)
@@ -59,9 +62,6 @@ endif()
 install(TARGETS
   nav2_send_goal
   nav2_send_waypoint
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION bin
   DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
